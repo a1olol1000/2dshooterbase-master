@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Rendering;
-
+using UnityEngine.UI;
 public class i_like_to_move_it_move_it : MonoBehaviour
 {
     [SerializeField]
@@ -13,19 +13,22 @@ public class i_like_to_move_it_move_it : MonoBehaviour
     [SerializeField]
     Transform gun;
     [SerializeField]
-    float time_till_shot=0.5f;
+    float timeTillShot=0.5f;
     float timer = 1;
     [SerializeField]
-    float max_ammo = 20f;
+    float maxAmmo = 20f;
     [SerializeField]
-    float starter_ammo= 3f;
+    float starterAmmo= 3f;
     float ammo= 0f;
     [SerializeField]
-    float ammo_gain_speed= 1f;
+    float ammoGainSpeed= 1f;
+    [SerializeField]
+    Slider ammoSlider;
     // Start is called before the first frame update
     void Start()
     {
-        ammo = starter_ammo;
+        ammo = starterAmmo;
+        UpdateAmmoSlider();
     }
 
     // Update is called once per frame
@@ -39,18 +42,24 @@ public class i_like_to_move_it_move_it : MonoBehaviour
         transform.Translate(movment);
 
         timer += 1 * Time.deltaTime;
-        ammo += ammo_gain_speed * Time.deltaTime;
-        if (ammo > max_ammo)
+        ammo += ammoGainSpeed * Time.deltaTime;
+        if (ammo > maxAmmo)
         {
-            ammo = max_ammo;
+            ammo = maxAmmo;
         }
 
-        if (Input.GetAxisRaw("Fire1")>0&& timer > time_till_shot&& ammo >1)
+        if (Input.GetAxisRaw("Fire1")>0&& timer > timeTillShot&& ammo >1)
         {
             Instantiate(bullet, gun.position, Quaternion.identity);
             timer = 0;
             ammo -= 1;
         }
+        UpdateAmmoSlider();
 
+    }
+    private void UpdateAmmoSlider()
+    {
+        ammoSlider.maxValue = maxAmmo;
+        ammoSlider.value =ammo;
     }
 }
